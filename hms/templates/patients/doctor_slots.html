@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Book Appointment — HMS{% endblock %}
+{% block content %}
+<h1 style="margin-bottom:8px;">📅 Dr. {{ doctor.user.get_full_name }}</h1>
+<p style="color:#718096;margin-bottom:24px;">{{ doctor.specialty }}</p>
+
+{% if slots %}
+<div class="card">
+    <h2>Available Slots</h2>
+    <p style="color:#718096;margin-bottom:20px;font-size:0.9rem;">Select a slot to book your appointment. Once booked, the slot is reserved for you.</p>
+    <table>
+        <thead><tr><th>Date</th><th>Start Time</th><th>End Time</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for slot in slots %}
+        <tr>
+            <td>{{ slot.date }}</td>
+            <td>{{ slot.start_time }}</td>
+            <td>{{ slot.end_time }}</td>
+            <td>
+                <form method="post" action="{% url 'book_slot' slot.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-sm"
+                        onclick="return confirm('Book this slot on {{ slot.date }} at {{ slot.start_time }}?')">
+                        Book
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p style="color:#718096;text-align:center;">No available slots for this doctor at the moment.</p>
+    <div style="text-align:center;margin-top:16px;">
+        <a href="{% url 'list_doctors' %}" class="btn btn-outline">← Back to Doctors</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

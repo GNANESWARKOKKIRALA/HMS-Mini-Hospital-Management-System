@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Patient Dashboard — HMS{% endblock %}
+{% block content %}
+<h1 style="margin-bottom:24px;">🧑‍⚕️ {{ request.user.get_full_name }} — Dashboard</h1>
+
+{% if not google_connected %}
+<div class="alert alert-info">
+    📅 <strong>Connect Google Calendar</strong> to automatically add appointments to your calendar.
+    <a href="{% url 'google_auth' %}" class="btn btn-outline btn-sm" style="margin-left:12px;">Connect Now</a>
+</div>
+{% else %}
+<div class="alert alert-success">✅ Google Calendar connected.</div>
+{% endif %}
+
+<div class="card" style="display:flex;gap:16px;align-items:center;">
+    <div style="flex:1;">
+        <h2>Find a Doctor</h2>
+        <p style="color:#718096;margin-bottom:16px;">Browse doctors and book an available appointment slot.</p>
+        <a href="{% url 'list_doctors' %}" class="btn btn-primary">Browse Doctors</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📅 My Appointments</h2>
+    {% if my_appointments %}
+    <table>
+        <thead><tr><th>Doctor</th><th>Specialty</th><th>Date</th><th>Time</th></tr></thead>
+        <tbody>
+        {% for appt in my_appointments %}
+        <tr>
+            <td>Dr. {{ appt.slot.doctor.user.get_full_name }}</td>
+            <td>{{ appt.slot.doctor.specialty }}</td>
+            <td>{{ appt.slot.date }}</td>
+            <td>{{ appt.slot.start_time }} – {{ appt.slot.end_time }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#718096;">No appointments yet. <a href="{% url 'list_doctors' %}">Book one now.</a></p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Find Doctors — HMS{% endblock %}
+{% block content %}
+<h1 style="margin-bottom:24px;">🔍 Find a Doctor</h1>
+
+{% if doctors %}
+<div class="card">
+    <table>
+        <thead><tr><th>Doctor</th><th>Specialty</th><th>Available Slots</th><th></th></tr></thead>
+        <tbody>
+        {% for doctor in doctors %}
+        <tr>
+            <td><strong>Dr. {{ doctor.user.get_full_name }}</strong></td>
+            <td>{{ doctor.specialty }}</td>
+            <td>
+                <span class="badge badge-green">
+                    {{ doctor.availability_slots.all|length }} slots
+                </span>
+            </td>
+            <td>
+                <a href="{% url 'doctor_slots' doctor.id %}" class="btn btn-primary btn-sm">View Slots</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p style="color:#718096;text-align:center;">No doctors with available slots at this time. Please check back later.</p>
+</div>
+{% endif %}
+{% endblock %}

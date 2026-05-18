@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Sign Up — HMS{% endblock %}
+{% block content %}
+<div style="max-width:500px;margin:0 auto;">
+    <div class="card">
+        <h2>👨‍⚕️ Doctor Sign Up</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;">Create Doctor Account</button>
+        </form>
+        <p style="margin-top:20px;text-align:center;font-size:0.9rem;color:#718096;">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
